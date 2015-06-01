@@ -2,7 +2,7 @@
   "name": "angular-addresses",
   "version": "1.0.0",
   "description": "",
-  "main": "index.htm",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
