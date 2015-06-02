@@ -1,14 +1,35 @@
 doctype html
-html(lang="en-US")
+html(lang="en-US", ng-app="angularAddresses")
   head
     meta(charset="utf-8")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Angular Addresses
-    link(rel="stylesheet", href="lib/build.css")
-    link(rel="stylesheet", href="css/main.css")
-  body
+  body(ng-controller="Main as main")
     .container
+      form(name="newAddressForm", ng-submit="newAddressForm.$valid && main.addNewContact()", novalidate)
+        label Name
+        input(type="text", placeholder="John", ng-model="main.newPerson.name", required)
+        label Phone
+        input(type="tel", placeholder="867-5309", ng-model="main.newPerson.phone", required)
+        label Twitter
+        input(type="text", placeholder="@abc123", ng-model="main.newPerson.twitter", required)
+        input(type="submit", value="Add Person to Address Book" ng-disabled="newAddressForm.$invalid")
+      table
+        thead
+          tr
+            th
+            th Name
+            th Phone
+            th Twitter
+        tbody
+          tr(ng-repeat="person in main.people | orderBy:'name' | filter:query")
+            td
+              button(ng-click="main.removeContact(person)") X
+            td {{person.name | uppercase}}
+            td: a(href="tel:{{person.phone}}") {{person.phone}}
+            td: a(href="http://twitter.com/{{person.twitter}}", target="_blank") {{person.twitter}}
+      input(placeholder="Search", ng-model="query")
 
     script(src="lib/build.js")
     script(src="js/main.js")
