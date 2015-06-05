@@ -5,31 +5,18 @@ html(lang="en-US", ng-app="angularAddresses")
     meta(http-equiv="X-UA-Compatible", content="IE=edge")
     meta(name="viewport", content="width=device-width, initial-scale=1")
     title Angular Addresses
-  body(ng-controller="Main as main")
+    link(rel="stylesheet" href="lib/build.css")
+    link(rel="stylesheet" href="css/main.css")
+  body
     .container
-      form(name="newAddressForm", ng-submit="newAddressForm.$valid && main.addNewContact()", novalidate)
-        label Name
-        input(type="text", placeholder="John", ng-model="main.newPerson.name", required)
-        label Phone
-        input(type="tel", placeholder="867-5309", ng-model="main.newPerson.phone", required)
-        label Twitter
-        input(type="text", placeholder="@abc123", ng-model="main.newPerson.twitter", required)
-        input(type="submit", value="Add Person to Address Book" ng-disabled="newAddressForm.$invalid")
-      table
-        thead
-          tr
-            th
-            th Name
-            th Phone
-            th Twitter
-        tbody
-          tr(ng-repeat="person in main.people | orderBy:'name' | filter:query")
-            td
-              button(ng-click="main.removeContact(person)") X
-            td {{person.name | uppercase}}
-            td: a(href="tel:{{person.phone}}") {{person.phone}}
-            td: a(href="http://twitter.com/{{person.twitter}}", target="_blank") {{person.twitter}}
-      input(placeholder="Search", ng-model="query")
+      nav
+        ul
+          li: a(href="/#/") Home
+          li: a(href="/#/contact") Contact
+          li: a(href="/#/about") About
+          li: a(href="/#/404") 404
+          li: a(href="/#/people") Go to App
+      .app(ng-view)
 
     script(src="lib/build.js")
     script(src="js/main.js")

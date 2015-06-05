@@ -1,0 +1,20 @@
+table
+  thead
+    tr
+      th
+      th Photo
+      th Name
+      th Phone
+      th Twitter
+  tbody
+    tr(ng-repeat="(id, person) in main.people | objToArr | orderBy:'name' | filter:query")
+      td
+        button.btn.btn-xs.btn-danger(ng-click="main.removeAddress(person._id)") X
+      td
+        img(ng-src="{{person.photo}}")
+      td
+        | {{person.name | ransomcase}}
+      td: a(href="tel:{{person.phone}}")
+        | {{person.phone}}
+      td: a(href="http://twitter.com/{{person.twitter}}", target="_blank")
+        | {{person.twitter}}

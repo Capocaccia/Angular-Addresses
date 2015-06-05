@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Ben",
+        "twitter": "@ben123",
+        "phone": "8675309",
+        "photo": "http://i.imgur.com/tbN7cwJ.jpg"
+    },
+    {
+        "name": "Dan",
+        "twitter": "@dandan",
+        "phone": "8675309",
+        "photo": "http://i.imgur.com/tbN7cwJ.jpg"
+    },
+    {
+        "name": "Elsa",
+        "twitter": "@letitgo",
+        "phone": "8675309",
+        "photo": "http://i.imgur.com/tbN7cwJ.jpg"
+    },
+    {
+        "name": "Amanda",
+        "twitter": "@princessamanda",
+        "phone": "8675309",
+        "photo": "http://i.imgur.com/tbN7cwJ.jpg"
+    },
+    {
+        "name": "Charity",
+        "twitter": "@nonprofit",
+        "phone": "8675309",
+        "photo": "http://i.imgur.com/tbN7cwJ.jpg"
+    }
+]

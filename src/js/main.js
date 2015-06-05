@@ -1,26 +1,78 @@
 angular
-  .module('angularAddresses', [])
+  .module('angularAddresses', ['ngRoute'])
 
-  .controller('Main', function () {
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/landing.html'
+      })
+      .when('/contact', {
+        templateUrl: 'views/contact.html'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html'
+      })
+      .when('/people', {
+        templateUrl: 'views/people.html',
+        controller: 'Main',
+        controllerAs: 'main'
+      })
+      .otherwise({
+        templateUrl: 'views/404.html'
+      });
+  })
+
+  .filter('objToArr', function () {
+    return function (obj) {
+      if (obj) {
+        return Object
+          .keys(obj)
+          .map(function (key) {
+            obj[key]._id = key;
+            return obj[key];
+          });
+      }
+    }
+  })
+
+  .filter('ransomcase', function () {
+    return function (string) {
+      return string
+        .split('')
+        .map(function (char, i) {
+          return i % 2 ? char.toUpperCase() : char.toLowerCase();
+        })
+        .join('');
+    }
+  })
+
+  .controller('Main', function ($http) {
     var vm = this;
 
-    vm.people = [
-      {name: 'Ben', twitter: '@ben123', phone: '8675309'},
-      {name: 'Dan', twitter: '@dandan', phone: '8675309'},
-      {name: 'Elsa', twitter: '@letitgo', phone: '8675309'},
-      {name: 'Amanda', twitter: '@princessamanda', phone: '8675309'},
-      {name: 'Charity', twitter: '@nonprofit', phone: '8675309'}
-    ];
+    $http
+      .get('https://addressangular.firebaseio.com/people.json')
+      .success(function (data) {
+        vm.people = data;
+      });
 
     vm.newPerson = {};
 
-    vm.addNewContact = function(){
-      vm.people.push(vm.newPerson);
-      vm.newPerson = {};
-    }
+    vm.addNewAddress = function () {
+      $http
+        .post('https://addressangular.firebaseio.com/people.json', vm.newPerson)
+        .success(function (res) {
+          vm.people[res.name] = vm.newPerson;
+          vm.newPerson = {};
+          $('#modal').modal('hide');
+        });
+    };
 
-    vm.removeContact=function(person){
-      var index = vm.people.indexOf(person);
-      vm.people.splice(index, 1);
-    }
+    vm.removeAddress = function (id) {
+      $http
+        .delete(`https://addressangular.firebaseio.com/people/${id}.json`)
+        .success(function () {
+          delete vm.people[id]
+        });
+    };
+
   });
