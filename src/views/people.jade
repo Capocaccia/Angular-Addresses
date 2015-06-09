@@ -2,9 +2,26 @@ h1 AngularAddresses
 h2 Search
 input(placeholder="Search", ng-model="query")
 h2 Addresses
-.btn.btn-primary(data-toggle="modal", data-target="#modal") New Address
+a.btn.btn-primary(href="#/people/new") New Address
 .gallery
   .person(ng-repeat="(id, person) in main.people | objToArr | orderBy:'name' | filter:query")
-    img(ng-src="{{person.photo}}")
+    a(href="#/people/{{person._id}}")
+      img(ng-src="{{person.photo}}")
 
-div(ng-include="'views/modal.html'")
+div(ng-include="'views/modal.html'" onload="main.onModalLoad()")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
