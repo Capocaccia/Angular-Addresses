@@ -3,7 +3,7 @@ angular
 
   .constant('API_URL', 'https://addressangular.firebaseio.com')
 
-  .config(function ($routeProvider) {
+   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/landing.html'
@@ -18,27 +18,59 @@ angular
       .when('/people', {
         templateUrl: 'views/people.html',
         controller: 'Main',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        private: true
       })
       .when('/people/new', {
         templateUrl: 'views/people.html',
         controller: 'NewPersonCtrl',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        private: true
       })
       .when('/people/:id', {
         templateUrl: 'views/person.html',
         controller: 'PersonController',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        private: true
       })
       .when('/people/:id/edit', {
         templateUrl: 'views/person.html',
         controller: 'EditPersonCtrl',
-        controllerAs: 'main'
+        controllerAs: 'main',
+        private: true
+      })
+
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'auth',
+        resolve: {
+          checkLogin: function($rootScope, $location){
+            if($rootScope.auth){
+              $location.path('/people')
+            }
+          }
+        }
+      })
+
+      .when('/logout', {
+        template: '<h1>Logging out...</h1>',
+        controller: 'LogoutCtrl'
       })
 
       .otherwise({
         templateUrl: 'views/404.html'
       });
+  })
+
+  .run(function ($rootScope, API_URL, $location) {
+    $rootScope.$on('$routeChangeStart', function (event, nextRoute) {
+      if (nextRoute.$$route && nextRoute.$$route.private && !$rootScope.auth) {
+        $location.path('/login')
+      }
+      var fb = new Firebase(API_URL);
+      $rootScope.auth = fb.getAuth();
+    });
   })
 
   .filter('objToArr', function () {
@@ -65,7 +97,45 @@ angular
     }
   })
 
-  .controller('PersonController', function ($routeParams, Person) {
+  .controller('LogoutCtrl', function ($rootScope, $scope, $location, API_URL) {
+    var fb = new Firebase(API_URL);
+
+    fb.unauth(function () {
+      $rootScope.auth = null;
+      $location.path('/login');
+      $scope.$apply();
+    });
+  })
+
+  .controller('LoginCtrl', function ($rootScope, $scope, $location, API_URL) {
+    var vm = this;
+
+    if($rootScope.auth){
+      $location.path('/people')
+    }
+
+    vm.login = function () {
+      var fb = new Firebase(API_URL);
+
+      fb.authWithPassword({
+        email: vm.email,
+        password: vm.password
+      }, function (err, authData) {
+        if (err) {
+          console.log('Error', err)
+        } else {
+          $rootScope.auth = authData;
+          $location.path('/people');
+          $scope.$apply();
+        }
+      });
+
+    };
+
+    vm.register = function () {};
+  })
+
+  .controller('PersonController', function ($routeParams, $location, Person) {
     var vm = this;
     vm.id = $routeParams.id;
 
@@ -75,7 +145,7 @@ angular
 
     vm.destroy = function (id) {
       Person.destroy(vm.id, function () {
-        window.location.href = '#/people';
+        $location.path('/people');
       });
     };
 
@@ -116,14 +186,15 @@ angular
     }
   })
 
-  .controller('NewPersonCtrl', function (Person) {
+  .controller('NewPersonCtrl', function ($location, $scope, Person) {
     var vm = this;
 
     vm.onModalLoad = function () {
       $('#modal').modal('show');
 
       $('#modal').on('hidden.bs.modal', function (e) {
-        window.location.href = '#/people';
+        $location.path('/people');
+        $scope.$apply();
       });
     };
 
@@ -138,15 +209,20 @@ angular
     });
   })
 
-  .controller('EditPersonCtrl', function ($routeParams, Person) {
+  .controller('EditPersonCtrl', function ($scope, $routeParams, $location, Person) {
     var vm = this;
     vm.id = $routeParams.id;
+
+    if (!$rootScope.auth) {
+      $location.path('/login');
+    }
 
     vm.onModalLoad = function () {
       $('#modal').modal('show');
 
       $('#modal').on('hidden.bs.modal', function (e) {
-        window.location.href = `#/people/${vm.id}`;
+        $location.path(`/people/${vm.id}`);
+        $scope.$apply();
       });
     };
 
@@ -161,8 +237,12 @@ angular
     });
   })
 
-  .controller('Main', function (Person) {
+  .controller('Main', function ($rootScope, $location, Person) {
     var vm = this;
+
+    if (!$rootScope.auth) {
+      $location.path('/login');
+    }
 
     Person.getAll(function (people) {
       vm.people = people;
@@ -170,3 +250,5 @@ angular
 
     vm.onModalLoad = function () {};
   });
+
+

@@ -20,5 +20,5 @@
             label.control-label Twitter
             input.form-control(name="i", type="url", placeholder="http://google.com/img.jpg", ng-model="main.person.photo", required)
       .modal-footer
-        button.btn.btn-danger(data-dismiss="modal") Cancel
+        button.btn.btn-danger(ng-click="main.cancel()") Cancel
         button.btn.btn-primary(ng-click="addressForm.$valid && main.saveAddress()", ng-disabled="addressForm.$invalid") Save
