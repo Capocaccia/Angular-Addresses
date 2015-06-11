@@ -13,7 +13,7 @@ module.exports = function(grunt) {
     autoprefixer: {
       main: {
         options: ['>1% in US'],
-        src: 'public/css/main.css'
+        src: 'public/assets/main.css'
       }
     },
     babel: {
@@ -116,7 +116,7 @@ module.exports = function(grunt) {
           outputStyle: 'compressed'
         },
         files: {
-          'public/css/main.css': 'src/_styles/main.scss'
+          'public/assets/main.css': 'src/assets/main.scss'
         }
       },
       dev: {
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
           sourceMapEmbed: true
         },
         files: {
-          'public/css/main.css': 'src/_styles/main.scss'
+          'public/assets/main.css': 'src/assets/main.scss'
         }
       }
     },
@@ -153,7 +153,7 @@ module.exports = function(grunt) {
         },
 
         files: [
-          'public/css/main.css',
+          'public/assets/main.css',
           'public/js/**/*.js',
           'public/**/*.html'
         ]

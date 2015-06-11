@@ -1,0 +1,9 @@
+h1 {{main.person.name}}
+img(ng-src="{{main.person.photo}}")
+a(href="http://twitter.com/{{main.person.twitter}}", target="_blank") {{main.person.twitter}}
+a(href="tel:{{main.person.phone}}") {{main.person.phone}}
+a.btn.btn-primary(href="#/people/{{main.id}}/edit") Edit
+a.btn.btn-danger(ng-click="main.destroy()") Delete
+
+
+div(ng-include="'assets/people/modal.html'" onload="main.onModalLoad()")

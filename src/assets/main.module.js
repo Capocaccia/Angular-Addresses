@@ -1,0 +1,2 @@
+angular
+  .module('angularAddresses', ['ngRoute'])

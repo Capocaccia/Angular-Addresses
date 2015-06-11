@@ -1,0 +1,24 @@
+.modal.fade#modal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(data-dismiss="modal")
+          span &times;
+        h1 Address
+      .modal-body
+        form(name="addressForm", novalidate)
+          .form-group(ng-class="{'has-success': addressForm.n.$dirty && main.person.name.length > 1, 'has-error': addressForm.n.$dirty && !main.person.name}")
+            label.control-label Name
+            input.form-control(name="n", type="text", placeholder="John", ng-model="main.person.name", required)
+          .form-group(ng-class="{'has-success': addressForm.p.$dirty && main.person.phone, 'has-error': addressForm.p.$dirty && !main.person.phone}")
+            label.control-label Phone
+            input.form-control(name="p", type="tel", placeholder="615-555-5555", ng-model="main.person.phone", required)
+          .form-group(ng-class="{'has-success': addressForm.t.$dirty && main.person.twitter.length > 1 && main.person.twitter[0] === '@' , 'has-error': addressForm.t.$dirty && (main.person.twitter.length < 2 || main.person.twitter[0] !== '@')}")
+            label.control-label Twitter
+            input.form-control(name="t", type="text", placeholder="@abc123", ng-model="main.person.twitter", required)
+          .form-group(ng-class="{'has-success': addressForm.t.$dirty && addressForm.i.$valid , 'has-error': addressForm.t.$dirty && addressForm.i.$invalid }")
+            label.control-label Twitter
+            input.form-control(name="i", type="url", placeholder="http://google.com/img.jpg", ng-model="main.person.photo", required)
+      .modal-footer
+        button.btn.btn-danger(ng-click="main.cancel()") Cancel
+        button.btn.btn-primary(ng-click="addressForm.$valid && main.saveAddress()", ng-disabled="addressForm.$invalid") Save
